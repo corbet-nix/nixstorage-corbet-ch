@@ -2,14 +2,59 @@ name: ci
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
+  workflow_dispatch:
+
+# A push to a branch that already has an open pull request fires both triggers, and the second run
+# spends its minutes re-proving exactly what the first one is proving. Grouped per ref, so a run on
+# main never cancels a run on someone else's branch.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
-  nix-flake-check:
+  check:
+    name: nix flake check (every declared system)
     runs-on: ubuntu-latest
+    # Observed runs of the previous (weaker) workflow land at 1m45s-2m10s wall clock, and the work
+    # per run does not change here -- the systems list narrowed to the one that was actually being
+    # evaluated all along. Sized well above 3x that p95 so the real builds in `checks` (the layout
+    # image builder, the drift fixtures) have room on a cold cache, while a genuinely HUNG job still
+    # fails instead of holding a runner and the concurrency slot indefinitely.
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: cachix/install-nix-action@v27
-      - name: nix flake check
-        run: nix flake check --print-build-logs
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+
+      # --all-systems is NOT optional here, and is the whole reason this file spells the command
+      # out rather than running a bare `nix flake check`.
+      #
+      # Without it, `nix flake check` evaluates only the checks for the RUNNER's own system and
+      # prints "omitted these incompatible systems" as a warning -- then exits 0. Every other system
+      # this flake declares goes unevaluated while CI reports green, which is a check that passed
+      # having tested nothing. This repository ran exactly that way until now: it declared
+      # aarch64-linux, never evaluated it, and was green about it on every push.
+      #
+      # `supportedSystems` in flake.nix is deliberately narrow so this can be strict: only platforms
+      # that can genuinely be evaluated are declared, and all of them really are. The checks here
+      # build real derivations, so a foreign system is import-from-derivation without a builder --
+      # which is why the honest fix was to stop declaring what could not be proven, not to relax
+      # the command.
+      #
+      # --keep-going: one failing check must not abort the checks that have not run yet. A single
+      # broken derivation otherwise hides every other result behind it, and the next push fixes one
+      # thing only to uncover the next. Every check reports its own verdict; the run is still red
+      # if any of them failed.
+      #
+      # --print-build-logs: a failed check whose build log is not in the run output is a red mark
+      # with no evidence, which sends the reader to reproduce it locally before they can even read
+      # the error.
+      - name: nix flake check (all systems)
+        run: nix flake check --all-systems --keep-going --print-build-logs

@@ -52,7 +52,26 @@
   outputs = { self, nixpkgs, nixiam, nixtest, nixhost }:
     let
       lib = nixpkgs.lib;
-      supportedSystems = [ "x86_64-linux" "aarch64-linux" ];
+      # x86_64 ONLY, and narrow on purpose rather than by omission.
+      #
+      # A declared system is a PROMISE that `nix flake check --all-systems` can keep. This flake
+      # cannot keep it for aarch64: `checks` builds real derivations (the layout image builder
+      # actually building an image, the verify script actually detecting drift), and evaluating
+      # them for a foreign system is import-from-derivation -- so the evaluation needs an aarch64
+      # builder before it can even produce the check, and neither a CI runner nor any host this
+      # module set is written for has one.
+      #
+      # The previous list said "aarch64-linux" and nothing enforced it, because a bare `nix flake
+      # check` silently omits the systems it cannot evaluate and still exits 0. The declaration was
+      # therefore never true and never tested -- exactly the vacuous-green shape this family refuses
+      # everywhere else. Narrowing the list is what makes `--all-systems` in ci.yml honest: every
+      # system named below really is evaluated, and the check is red when it should be.
+      #
+      # This is not a portability claim about the modules -- shape/delivery/disks are pure schema.
+      # It is a claim about what CI can PROVE. The module set drives the ZFS/SMR disk table of one
+      # x86_64 host; if an aarch64 consumer ever appears, add it back together with a builder that
+      # can evaluate it, not before.
+      supportedSystems = [ "x86_64-linux" ];
       forAllSystems = lib.genAttrs supportedSystems;
       pkgsFor = system: import nixpkgs { inherit system; };
     in

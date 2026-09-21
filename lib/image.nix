@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 #
 # The builder: turn a resolved partition list into ONE raw disk image --
 # a plain, ordinary FILE, and nothing this repo ever writes to a block

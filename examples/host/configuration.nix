@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 # The smallest NixOS configuration that composes nixstorage's own four
 # implemented modules together with nixiam's posix identity module, used by the
 # `modules-evaluate` check.

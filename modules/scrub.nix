@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 # modules/scrub.nix
 #
 # THE INTEGRITY-VERIFICATION LEG of nixstorage's own thesis (see repo

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 # nixstorage-layout-verify -- see modules/layout.nix's own header for the
 # full design story and modules/reconciler.nix's own reconcile.sh for the
 # sibling this file's shape is deliberately copied from: one plain,

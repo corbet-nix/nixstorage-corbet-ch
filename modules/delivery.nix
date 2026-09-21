@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 # modules/delivery.nix
 #
 # The DELIVERY half of nixstorage: `options.nixstorage.delivery` declares

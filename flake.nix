@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 {
   description = "Declarative storage, as ONE layer between hosts and the consumers of data: the physical disk table every other module reads by name, pre-pool media layout (a GPT partition table -- sizes, sector size, roles -- built as a pure derivation emitting a plain FILE, plus a read-only drift check against live media), ZFS dataset shape (recordsize/compression convergence), and category-based delivery (source -> $HOME -> XDG -> scope), reconciled by one idempotent pass. Ownership -- uid/gid and its Kubernetes securityContext twin -- is deliberately NOT here; a dataset names its owner by a string key into nixiam instead.";
 
@@ -11,7 +12,7 @@
     # "Why nixstorage depends on nixiam, and never the reverse"). This dependency is permanently
     # one-way: nixiam must never learn a dataset name or a pool path.
     nixiam = {
-      url = "github:julian-corbet/nixiam-corbet-ch";
+      url = "github:corbet-nix/nixiam-corbet-ch";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -26,7 +27,7 @@
     # nixstorage.disks would have passed silently while the check still reported success. One
     # recipe taken as a dependency cannot drift from itself the way a hand-kept copy did.
     nixtest = {
-      url = "github:julian-corbet/nixtest-corbet-ch";
+      url = "github:corbet-nix/nixtest-corbet-ch";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -44,7 +45,7 @@
     # `mkNixnas`) -- so a consumer importing `nixosModules.reconciler` sees an ordinary module
     # function and never needs to know `probeFact` exists.
     nixhost = {
-      url = "git+https://github.com/julian-corbet/nixhost-corbet-ch";
+      url = "git+https://github.com/corbet-nix/nixhost-corbet-ch";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -176,7 +177,7 @@
       #
       # ⚠ nixiam's own posix/identity module (`nixiam.posix.identities`/`.groups`/`.podSecurity`
       # -- `modules/reconciler.nix`'s own declared cross-repo contract, see that file's header) is
-      # real and shipped. `github:julian-corbet/nixiam-corbet-ch` above is published and resolves
+      # real and shipped. `github:corbet-nix/nixiam-corbet-ch` above is published and resolves
       # normally -- see flake.lock and README's "Why nixstorage depends on nixiam" section.
       checks = forAllSystems (system:
         import ./checks {

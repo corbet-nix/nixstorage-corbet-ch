@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 # checks/default.nix
 #
 # Two kinds of test, the same split nixboot's own checks/default.nix draws:

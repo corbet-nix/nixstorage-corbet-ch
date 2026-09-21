@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 #
 # The partition ROLE catalogue: what `nixstorage.layout` actually knows how
 # to carve, kept as pure data -- the same "data separate from the module"

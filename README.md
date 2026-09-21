@@ -120,7 +120,7 @@ patterns it uses (`"native"`: runs as its own non-root uid directly; or
 drops privilege itself via `PUID`/`PGID`), and the Kubernetes
 `securityContext` a workload touching the same data needs to agree
 with — is declared exactly once, in
-[nixiam](https://github.com/julian-corbet/nixiam-corbet-ch), under a name
+[nixiam](https://github.com/corbet-nix/nixiam-corbet-ch), under a name
 (`nixiam.posix.identities.<name>`, in the design this repo implements).
 `nixstorage.reconciler` consumes that name; it never holds a raw uid/gid
 of its own — a tree ROOT's `owner`/`group` may still be a literal numeric
@@ -169,7 +169,7 @@ correctly.
     properties. `mount = "zfs"` needs no further mechanism anywhere.
   - **Client-side NETWORK mounts are not.** A category with `mount = "nfs"` is a
     fact for a client-side mount module — the role
-    [nixshare](https://github.com/julian-corbet/nixshare-corbet-ch) fills.
+    [nixshare](https://github.com/corbet-nix/nixshare-corbet-ch) fills.
   - **A container's mount TABLE is not.** Rendering `lxc.mount.entry` lines, an
     idmap, or a pod volume belongs to whichever substrate owns that container.
     Such a consumer should read a category BY NAME from
@@ -181,7 +181,7 @@ correctly.
   but that is a consequence of the above, not the rule itself.
 - **It does not back anything up.** ZFS send/receive discipline,
   replication-destination invariants, and freshness monitoring are
-  [nixbackup](https://github.com/julian-corbet/nixbackup-corbet-ch)'s
+  [nixbackup](https://github.com/corbet-nix/nixbackup-corbet-ch)'s
   entire reason to exist. `nixstorage` has no opinion on retention or
   replication targets.
 - **It does not install filesystem tooling.** Whatever ships `zfs(8)`
@@ -190,7 +190,7 @@ correctly.
   and only ever runs `zfs set`/`zfs get` against datasets that already
   exist.
 - **It does not boot anything.** Appliance boot chains, impermanence,
-  USB-image builds — [nixnas](https://github.com/julian-corbet/nixnas)'s
+  USB-image builds — [nixnas](https://github.com/corbet-nix/nixnas)'s
   job. `nixstorage` is a set of NixOS/system-manager modules any host can
   import; it has no opinion on how that host got to a running kernel.
 - **It does not mount, format, or open anything beyond the plain file
@@ -204,7 +204,7 @@ correctly.
   completely untouched — `cryptsetup luksFormat` needs a key, and the
   only place a key may ever be generated is on the real,
   already-written-to-media host, by a human, at the console
-  ([nixvault](https://github.com/julian-corbet/nixvault-corbet-ch)'s own
+  ([nixvault](https://github.com/corbet-nix/nixvault-corbet-ch)'s own
   `nixvault-create` lifecycle). Baking one into a world-readable Nix store
   path is not a shortcut this repo will ever take.
 - **It never touches a block device, in either direction.** See
@@ -307,8 +307,8 @@ silently assumed safe (see `experiments/README.md` #001).
 ```nix
 # flake.nix (consumer side)
 {
-  inputs.nixstorage.url = "github:julian-corbet/nixstorage-corbet-ch";
-  inputs.nixiam.url = "github:julian-corbet/nixiam-corbet-ch";
+  inputs.nixstorage.url = "github:corbet-nix/nixstorage-corbet-ch";
+  inputs.nixiam.url = "github:corbet-nix/nixiam-corbet-ch";
 
   outputs = { self, nixpkgs, nixstorage, nixiam, ... }: {
     nixosConfigurations.example-host = nixpkgs.lib.nixosSystem {
@@ -563,7 +563,7 @@ above):
   expected to match (asserted to reference a declared image).
 
 `nixiam.posix.identities.<name>` (a different repo, shipped in
-[nixiam](https://github.com/julian-corbet/nixiam-corbet-ch); the shape below
+[nixiam](https://github.com/corbet-nix/nixiam-corbet-ch); the shape below
 is `modules/reconciler.nix`'s own declared cross-repo contract, not this
 scaffold's invention):
 
@@ -657,7 +657,7 @@ job; whether that becomes a fifth piece of this repo or folds into
 The RIGHTS half of the design — `nixiam.posix.identities.<name>` (uid/gid/
 variant/reconcile) plus its derived `nixiam.posix.podSecurity.<name>`
 twin — has since shipped in
-[nixiam](https://github.com/julian-corbet/nixiam-corbet-ch)
+[nixiam](https://github.com/corbet-nix/nixiam-corbet-ch)
 (`nixosModules.posix`), matching the cross-repo contract
 `modules/reconciler.nix` had already declared in its own header before
 that landed (not invented independently of it). `checks/` composes it for
@@ -677,28 +677,28 @@ of that contract.
 
 `nixstorage` is one of several small, independently-usable open-source
 projects sharing a common design system:
-[nixiam](https://github.com/julian-corbet/nixiam-corbet-ch) (the identity
+[nixiam](https://github.com/corbet-nix/nixiam-corbet-ch) (the identity
 half of this exact split — RIGHTS, exposed as `nixiam.posix.identities` and
 consumed here by name, never the reverse),
-[nixshare](https://github.com/julian-corbet/nixshare-corbet-ch)
+[nixshare](https://github.com/corbet-nix/nixshare-corbet-ch)
 (actually mounts what a `delivery.nix` category with `mount = "nfs"`
-describes), [nixbackup](https://github.com/julian-corbet/nixbackup-corbet-ch)
+describes), [nixbackup](https://github.com/corbet-nix/nixbackup-corbet-ch)
 (ZFS backup-destination discipline — a sibling in spirit, same "hard-won
 rules as enforced modules, not documentation to remember" shape),
-[nixboot](https://github.com/julian-corbet/nixboot-corbet-ch) (the ESP
+[nixboot](https://github.com/corbet-nix/nixboot-corbet-ch) (the ESP
 `nixstorage.layout` carves as a `role = "esp"` partition is what
 `nixboot.esp` expects mounted, once a real host has booted from it; its
 own `esp.fromLayout` reads `config.nixstorage.layout.images or { }`
 defensively, no flake input in either direction — the same pattern
 `nixluks`/`nixvault` already use for `nixstorage.disks`),
-[nixvault](https://github.com/julian-corbet/nixvault-corbet-ch) (the
+[nixvault](https://github.com/corbet-nix/nixvault-corbet-ch) (the
 `luks`-role slot `nixstorage.layout` reserves-but-never-formats is what
 `nixvault-create` later turns into a real LUKS2 volume, by hand, on the
 console; its own `deviceFromLayout` reads the same option, the same
 defensive way), and
-[nixnas](https://github.com/julian-corbet/nixnas) (the appliance this
+[nixnas](https://github.com/corbet-nix/nixnas) (the appliance this
 model was extracted out of). Use any of them together or standalone.
 
-## License
+## Licence
 
-MIT.
+Outbound licence is `MIT OR Apache-2.0`. See `LICENSE-MIT` and `LICENSE-APACHE`; every source file carries `SPDX-License-Identifier: MIT OR Apache-2.0`.

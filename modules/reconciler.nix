@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 # modules/reconciler.nix
 #
 # THE RECONCILER: the one idempotent pass that converges real on-disk
@@ -57,7 +58,7 @@ with lib;
 let
   cfg = config.nixstorage.reconciler;
 
-  # ── nixiam.posix: read through `lib.probeFact` (github:julian-corbet/nixhost-corbet-ch,
+  # ── nixiam.posix: read through `lib.probeFact` (github:corbet-nix/nixhost-corbet-ch,
   # `lib/facts.nix`), see header for why. A bare `config.nixiam.posix.… or { }` cannot tell "nixiam
   # not composed here" from "nixiam composed but `identities`/`groups`/`podSecurity` moved, was
   # renamed, or was rejected by its own type" -- both silently fall back to `{ }` with a bare `or`,

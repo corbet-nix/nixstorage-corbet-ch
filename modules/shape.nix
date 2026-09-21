@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 # modules/shape.nix
 #
 # The SHAPE half of nixstorage: `options.nixstorage.shape` declares, for a

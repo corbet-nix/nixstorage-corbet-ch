@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 # checks/layout.nix
 #
 # The `nixstorage.layout` check group -- eval-time selection/validation checks for

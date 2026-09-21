@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 # nixstorage-reconcile — see modules/reconciler.nix's header for the full
 # design story and the cross-module contract this file is the runtime half
 # of. Deliberately kept as one plain, readable script (open it, diff it,

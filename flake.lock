@@ -138,11 +138,11 @@
         "narHash": "sha256-BfnFj865JuX2UqCWvhy7FPg/qKPziHzbYPTDV5KlUS8=",
         "rev": "60827e94a069b2bebe3e5c8a0ba7554fbb79c622",
         "type": "git",
-        "url": "https://github.com/julian-corbet/nixhost-corbet-ch"
+        "url": "https://github.com/corbet-nix/nixhost-corbet-ch"
       },
       "original": {
         "type": "git",
-        "url": "https://github.com/julian-corbet/nixhost-corbet-ch"
+        "url": "https://github.com/corbet-nix/nixhost-corbet-ch"
       }
     },
     "nixiam": {
@@ -155,13 +155,13 @@
       "locked": {
         "lastModified": 1785466971,
         "narHash": "sha256-LEi9IjId7Aq0YmE7YWwKPZa0QsFx4ITyT51bqmnU+cY=",
-        "owner": "julian-corbet",
+        "owner": "corbet-nix",
         "repo": "nixiam-corbet-ch",
         "rev": "018fc4ffe646e751b1873d7f6b8c73b09b8a4bb3",
         "type": "github"
       },
       "original": {
-        "owner": "julian-corbet",
+        "owner": "corbet-nix",
         "repo": "nixiam-corbet-ch",
         "type": "github"
       }
@@ -191,13 +191,13 @@
       "locked": {
         "lastModified": 1785454893,
         "narHash": "sha256-6+3x58daI3Ti+NXdcrAVugNp+LSxA6cini1p2jvA91g=",
-        "owner": "julian-corbet",
+        "owner": "corbet-nix",
         "repo": "nixtest-corbet-ch",
         "rev": "d26f171460e00b01be2b4c640e67fdc6f09a0562",
         "type": "github"
       },
       "original": {
-        "owner": "julian-corbet",
+        "owner": "corbet-nix",
         "repo": "nixtest-corbet-ch",
         "type": "github"
       }

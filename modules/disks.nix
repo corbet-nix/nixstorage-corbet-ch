@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 # modules/disks.nix
 #
 # THE DISK TABLE: `options.nixstorage.disks` names the physical block devices a host

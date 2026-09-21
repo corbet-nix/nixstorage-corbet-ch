@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 # modules/layout.nix
 #
 # The LAYOUT half of nixstorage: `options.nixstorage.layout` declares how
